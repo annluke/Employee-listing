@@ -5,16 +5,17 @@
         <link rel="stylesheet" href="style.css">
         <script src="scriptl.js"></script>
 	</head>
-	<body id="main-body" onload=GenerateTable()>
+	<body id="main-body" onload=generateTable()>
 		<header>
 			<h1 id="page-heading">EmHub</h1>
 		</header>
 		<section id="main-container">
+			<h2 id="container-heading">Employee Listing</h2>
 			<div id="form-group">
     			<input type="text" id="search-id" placeholder="Search" onkeyup="filter()" autocomplete="off">
 			</div>
 			<div id="table-container">
-				<table id="displayTable"></table>
+				<table id="display-table"></table>
 			</div>
 		</section>
 		<footer>

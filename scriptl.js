@@ -1,35 +1,35 @@
 var employee = [
 	{
 	 "Name": "Jaykrishnan",
-	 "Salary": 30000
+	 "Salary": "30,000"
 	}, 
 	{
 	 "Name": "Ann Mary",
-	 "Salary": 27500
+	 "Salary": "27,500"
 	},
 	{
 	 "Name": "Arjun Narayan",
-	 "Salary": 20150
+	 "Salary": "20,150"
 	},
 	{
 	 "Name": "Meera Reghu",
-	 "Salary": 30000
+	 "Salary": "30,000"
 	}, 
 	{
 	 "Name": "Ann Jose",
-	 "Salary": 27500
+	 "Salary": "27,500"
 	},
 	{
 	 "Name": "Tony Thomas",
-	 "Salary": 20150
+	 "Salary": "20,150"
 	},
 	{
 	 "Name": "Total",
-	 "Salary": 0
+	 "Salary": "0"
 	}
 ];
 
-var col = [], i, j, salaryTotal = 0;
+var col = [], i, j, salaryValue, salaryTotal = 0;
 
 function setCol () {
   var key;
@@ -42,15 +42,15 @@ function setCol () {
   }
 }
 
-function GenerateTable() {
+function generateTable () {
   var table, tr, th, tabCell, dvTable, row;
- 	setCol();
-
-  //Create table
+ 	
+  setCol();
   table = document.createElement("table");
 
   //Add header rows
-  tr = table.insertRow(-1);                   
+  tr = table.insertRow(-1);     
+  tr.setAttribute("id","headrow");              
   for (i = 0; i < col.length; i++) {
     th = document.createElement("th");      
     th.innerHTML = col[i];
@@ -65,24 +65,29 @@ function GenerateTable() {
       tabCell = tr.insertCell(-1);
       tabCell.innerHTML = employee[i][col[j]];
       if (i != employee.length-1 && col[j] == "Salary") {
-        salaryTotal += employee[i][col[j]];
+        salaryValue = employee[i][col[j]].replace(/\,/g,'');  //remove comma from salary string
+        salaryTotal += Number(salaryValue);
       }
       if (i == employee.length-1 && col[j] == "Salary") {
-        tabCell.innerHTML = salaryTotal;
+        tabCell.innerHTML = salaryTotal.toLocaleString('hi-IN');  //convert to hindi-india language code
       }
     }
   }
-  dvTable = document.getElementById("displayTable");
+  
+  dvTable = document.getElementById("display-table");
   dvTable.innerHTML = "";
   dvTable.appendChild(table);
+  row = document.getElementById("headrow");
+  alignSalaryCol(row);
   for (var i = 0; i < employee.length; i++) {
     row = document.getElementById("row" + i);
-    row.cells[1].style.textAlign = 'right';
-  };
+    alignSalaryCol(row);
+  }
 }
 
 function filter () {
   var searchString, checkString, row, cell, rowCount = 0;  
+
   searchString = new RegExp(document.getElementById("search-id").value,"i");
   salaryTotal = 0;
   for (i = 0; i < employee.length-1; i++) {
@@ -93,9 +98,10 @@ function filter () {
     }
     else {
       row.style.display = 'table-row'; 
-      row.cells[1].style.textAlign = 'right';
+      alignSalaryCol(row);
       rowCount ++; 
-      salaryTotal += employee[i][col[1]];
+      salaryValue = employee[i][col[1]].replace(/\,/g,'');  //remove comma from salary string
+      salaryTotal += Number(salaryValue);
     }
   }
   row = document.getElementById("row" + i);
@@ -105,8 +111,12 @@ function filter () {
   }
   else {
     row.cells[0].innerHTML = "Total";
-    row.cells[1].innerHTML = salaryTotal;
+    row.cells[1].innerHTML = salaryTotal.toLocaleString('hi-IN'); //convert to hindi-india language code
   }
   row.style.display = 'table-row';
-  row.cells[1].style.textAlign = 'right';
+  alignSalaryCol(row);
+}
+
+function alignSalaryCol (rows) {
+  rows.cells[1].style.textAlign = 'right';
 }

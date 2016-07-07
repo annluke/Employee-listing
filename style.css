@@ -1,31 +1,35 @@
 body{
   margin: 0;
+  min-height: 100%;
 }
 header {
 	background-color: #566A9B;
-    color: #fff;
-    padding: 15px;
-    height: 50px;
+  color: #fff;
+  padding: 10px;
+  height: 45px;
 }
 #page-heading {
 	font-size: 18px;
-	color: #fff;
 }
 footer {
 	background-color: #38486E;
-    color: #fff;
-    height: 40px;
-    width: 100%;
-    font-size: 12px;
-    padding: 15px;
+  color: #fff;
+  height: 40px;
+  width: 100%;
+  font-size: 12px;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;   
 }
 #main-container {
-    height: 90%;
+  height: 90%;
 }
-#main-container::after {
-    content: "";
-    display: block;
-    height: 100px;
+#container-heading {
+  font-size: 17px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 0;
 }
 #table-container {
 	margin: 0 auto;
@@ -34,20 +38,20 @@ footer {
 }
 #table-container::after {
  	content: "";
-    display: block;
-    height: 100px;
+  display: block;
+  height: 100px;
  }
-#displayTable {
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-    text-align: left;
+#display-table {
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  text-align: left;
 }
-#displayTable th, td {
-    padding: 15px;
-    border: 1px solid #ddd;
-    width: 300px;
+#display-table th, td {
+  padding: 15px;
+  border: 1px solid #ddd;
+  width: 300px;
 }
 #form-group {
 	float: right;
-	margin: 40px;
+	margin: 10px 30px;
 }
