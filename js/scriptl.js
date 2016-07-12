@@ -1,52 +1,44 @@
-var employee = [
-	{
-	 "Name": "Jaykrishnan",
-	 "Salary": "30,000"
-	}, 
-	{
-	 "Name": "Ann Mary",
-	 "Salary": "27,500"
-	},
-	{
-	 "Name": "Arjun Narayan",
-	 "Salary": "20,150"
-	},
-	{
-	 "Name": "Meera Reghu",
-	 "Salary": "30,000"
-	}, 
-	{
-	 "Name": "Ann Jose",
-	 "Salary": "27,500"
-	},
-	{
-	 "Name": "Tony Thomas",
-	 "Salary": "20,150"
-	},
-	{
-	 "Name": "Total",
-	 "Salary": "0"
-	}
-];
+var col = [], i, j, options, employee, response, totLength, salaryValue, salaryTotal = 0;
+options = {style: "currency", currency: "INR", minimumFractionDigits: 0};
 
-var col = [], i, j, salaryValue, salaryTotal = 0;
+function getEmployeeData() {
+  ajaxJsonReq( 'js/data.json' );
+}
 
-function setCol () {
+function ajaxJsonReq( url )
+{
+  var ajaxReq = new XMLHttpRequest();
+  ajaxReq.open( "GET", url, true );
+  ajaxReq.setRequestHeader("Content-type", "application/json");
+ 
+  ajaxReq.onreadystatechange = function()
+  {
+    if( ajaxReq.readyState == 4 && ajaxReq.status == 200 )
+      {
+        employee = JSON.parse( ajaxReq.responseText );            
+        generateTable(employee);
+      }
+  }
+  ajaxReq.send();
+}
+
+function setCol (employee, totLength) {
   var key;
-  for (i = 0; i < employee.length; i++) {
+  for (i = 0; i < totLength; i++) {
     for (key in employee[i]) {
       if (col.indexOf(key) === -1) {
         col.push(key);
       }
     }
   }
+  return col;
 }
 
-function generateTable () {
+function generateTable (employee) {
   var table, tr, th, tabCell, dvTable, row;
- 	
-  setCol();
-  table = document.createElement("table");
+ 	totLength = employee.length;
+  col = setCol(employee, totLength);
+  table = document.getElementById("display-table");
 
   //Add header rows
   tr = table.insertRow(-1);     
@@ -56,27 +48,25 @@ function generateTable () {
     th.innerHTML = col[i];
     tr.appendChild(th);
   }
-
+  
   //Add the data rows.
-  for (i = 0; i < employee.length; i++) {
+  for (i = 0; i < totLength; i++) {
     tr = table.insertRow(-1);
     tr.setAttribute("id","row" + i);
     for (j = 0; j < col.length; j++) {
       tabCell = tr.insertCell(-1);
       tabCell.innerHTML = employee[i][col[j]];
-      if (i != employee.length-1 && col[j] == "Salary") {
-        salaryValue = employee[i][col[j]].replace(/\,/g,'');  //remove comma from salary string
-        salaryTotal += Number(salaryValue);
-      }
-      if (i == employee.length-1 && col[j] == "Salary") {
-        tabCell.innerHTML = salaryTotal.toLocaleString('hi-IN');  //convert to hindi-india language code
-      }
     }
   }
+
+  //Calculate total salary
+  for (i = 0; i < totLength - 1; i++) {
+    salaryValue = employee[i][col[1]].replace(/\,/g,'');  //remove comma from salary string
+    salaryTotal += Number(salaryValue);
+  }
+  row = document.getElementById("row" + i);
+  row.cells[1].innerHTML = salaryTotal.toLocaleString('hi-IN',options);
   
-  dvTable = document.getElementById("display-table");
-  dvTable.innerHTML = "";
-  dvTable.appendChild(table);
   row = document.getElementById("headrow");
   alignSalaryCol(row);
   for (var i = 0; i < employee.length; i++) {
@@ -90,7 +80,7 @@ function filter () {
 
   searchString = new RegExp(document.getElementById("search-id").value,"i");
   salaryTotal = 0;
-  for (i = 0; i < employee.length-1; i++) {
+  for (i = 0; i < totLength-1; i++) {
     row = document.getElementById("row" + i);
     checkString = employee[i][col[0]];
     if (!searchString.test(checkString)) {
@@ -111,7 +101,7 @@ function filter () {
   }
   else {
     row.cells[0].innerHTML = "Total";
-    row.cells[1].innerHTML = salaryTotal.toLocaleString('hi-IN'); //convert to hindi-india language code
+    row.cells[1].innerHTML = salaryTotal.toLocaleString('hi-IN',options); //convert to hindi-india language code
   }
   row.style.display = 'table-row';
   alignSalaryCol(row);
